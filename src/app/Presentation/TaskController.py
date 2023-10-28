@@ -32,6 +32,7 @@ class TaskList(Resource):
     def post(self):
         """Create a new task"""
         data = api.payload.copy()
+        data['user_id'] = 1 #TODO: get user_id from token
         task = self.task_service.create(**data)
         return task, 201
     

@@ -14,9 +14,10 @@ class TaskService:
     def get_all(self):
         return self.task_repository.get_all()
 
-    def create(self,name, description, user_id):
-        task = Task(name=name, description=description, user_id=user_id)
-        return self.task_repository.add(task)
+    def create(self,name, user_id):
+        task = Task(name=name, user_id=user_id)
+        self.task_repository.add(task)
+        return task
 
     def update(self, id, task):
         return self.task_repository.update(id,task)
