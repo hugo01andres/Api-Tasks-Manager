@@ -5,7 +5,8 @@ from marshmallow import ValidationError
 
 class UserRepository(RepositoryBase):
     def __init__(self):
-        super().__init__(User, db)
+        session = db.session
+        super().__init__(User, session)
 
     def get_by_username(self, username):
         try:

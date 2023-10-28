@@ -2,9 +2,9 @@ from marshmallow import ValidationError
 
 
 class RepositoryBase:
-    def __init__(self, model, db):
+    def __init__(self, model, session):
         self.model = model
-        self.db = db
+        self.session = session
 
     def get_all(self):
         try:
@@ -20,21 +20,22 @@ class RepositoryBase:
         
     def add(self, entity):
         try:
-            self.db.session.add(entity)
-            self.db.session.commit()
+            self.session.add(entity)
+            self.session.commit()
         except Exception as e:
+            print(f"Error: {e}")
             raise ValidationError("Error al agregar el registro")
         
     def update(self, entity):
         try:
-            self.db.session.merge(entity)
-            self.db.session.commit()
+            self.session.merge(entity)
+            self.session.commit()
         except Exception as e:
             raise ValidationError("Error al actualizar el registro")
         
     def delete(self, entity):
         try:
-            self.db.session.delete(entity)
-            self.db.session.commit()
+            self.session.delete(entity)
+            self.session.commit()
         except Exception as e:
             raise ValidationError("Error al eliminar el registro")

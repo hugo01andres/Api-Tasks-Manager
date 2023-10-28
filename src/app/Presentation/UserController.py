@@ -31,7 +31,8 @@ class UserList(Resource):
     def post(self):
         """Create a new user"""
         data = api.payload.copy() #Is what the post brings
-        user = self.user_service.create(data)
+        print(data)
+        user = self.user_service.create(**data)
         return user, 201
     
 

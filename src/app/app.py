@@ -5,6 +5,7 @@ from flasgger import Swagger
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api
 from flask_migrate import Migrate
+from flask_injector import FlaskInjector
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -23,3 +24,5 @@ migrate = Migrate(app, db)
 from app.Presentation.UserController import api as user_ns
 api.add_namespace(user_ns, path='/users')
 
+# Dependency Injection
+FlaskInjector(app=app)
