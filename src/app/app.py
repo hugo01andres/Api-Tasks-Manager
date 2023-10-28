@@ -4,6 +4,7 @@ from app.config import Config
 from flasgger import Swagger
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api
+from flask_migrate import Migrate
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -16,7 +17,7 @@ api = Api(app, version='1.0', title='API', description='A simple API')
 Swagger(app)
 # Database instance
 db = SQLAlchemy(app)
-
+migrate = Migrate(app, db)
 
 # APP Routes
 from app.Presentation.UserController import api as user_ns
