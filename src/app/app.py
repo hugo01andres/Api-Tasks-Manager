@@ -1,19 +1,28 @@
 from flask import Flask
-# instalar flask_cors con pip install flask_cors
 from flask_cors import CORS
-from app.Infraestructure.db import db
-from dotenv import load_dotenv
-import os
+from app.config import Config
 from flasgger import Swagger
+from flask_sqlalchemy import SQLAlchemy
+from flask_restx import Api
+from flask_migrate import Migrate
+from flask_injector import FlaskInjector
 
-load_dotenv()
+# Create an instance of Flask
+app = Flask(__name__)
+# Load the config file
+app.config.from_object(Config)
+# CORS 
+CORS(app, resources={r"/*/": {"origins": "*"}})
+api = Api(app, version='1.0', title='API', description='A simple API')
+# We put Swagger
+Swagger(app)
+# Database instance
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-def create_app():
-    app = Flask(__name__)
-    print(os.environ.get('SQLALCHEMY_DATABASE_URI'))
-    CORS(app)
-    Swagger(app)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
-    db.init_app(app)
-    return app
+# APP Routes
+from app.Presentation.UserController import api as user_ns
+api.add_namespace(user_ns, path='/users')
+
+# Dependency Injection
+FlaskInjector(app=app)

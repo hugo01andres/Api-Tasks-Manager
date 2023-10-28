@@ -1,4 +1,4 @@
-from app.Infraestructure.db import db
+from app.app import db
 
 class Task(db.Model):
     __tablename__ = 'tasks'
