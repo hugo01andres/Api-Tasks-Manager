@@ -14,7 +14,7 @@ class UserService:
         return self.user_repository.get_all()
 
     def create(self, user):
-        return self.user_repository.create(user)
+        return self.user_repository.add(user)
 
     def update(self, id, user):
         return self.user_repository.update(id,user)

@@ -3,14 +3,22 @@ from flask_cors import CORS
 from app.config import Config
 from flasgger import Swagger
 from flask_sqlalchemy import SQLAlchemy
+from flask_restx import Api
 
-# Crea una instancia de la aplicacion
+# Create an instance of Flask
 app = Flask(__name__)
-# Carga la configuracion de la aplicacion
+# Load the config file
 app.config.from_object(Config)
-# Habilita CORS
-CORS(app)
-# Habilita Swagger
+# CORS 
+CORS(app, resources={r"/*/": {"origins": "*"}})
+api = Api(app, version='1.0', title='API', description='A simple API')
+# We put Swagger
 Swagger(app)
-# Crea una instancia de la base de datos
+# Database instance
 db = SQLAlchemy(app)
+
+
+# APP Routes
+from app.Presentation.UserController import api as user_ns
+api.add_namespace(user_ns, path='/users')
+

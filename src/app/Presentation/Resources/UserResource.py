@@ -1,6 +1,10 @@
 from flask_restx import Resource, Namespace, fields
 
 
+class NullableString(fields.String):
+    __schema_type__ = ['string', 'null']
+    __schema_example__ = 'nullable string'
+
 def user_resource(api):
     CreateUserDto = api.model('CreateUserDto', {
         'name': fields.String(required=True, description='User name'),

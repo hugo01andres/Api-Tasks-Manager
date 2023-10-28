@@ -10,11 +10,11 @@ CreateUserDto, UpdateUserDto, ReadUser = user_resource(api)
 
 #parser_user_lists = api.parser()
 #parser_user_lists.add_argument('user_id', type=int, help='User id', help='User id')
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class UserList(Resource):
     @inject
-    def __init__(self, **kwargs):
-        self.user_service = UserService()
+    def __init__(self,user_service : UserService, **kwargs):
+        self.user_service = user_service
         super().__init__(**kwargs)
 
     api.doc('Lists_users')
@@ -30,7 +30,7 @@ class UserList(Resource):
     @api.marshal_with(ReadUser)
     def post(self):
         """Create a new user"""
-        data = api.payload #Is what the post brings
+        data = api.payload.copy() #Is what the post brings
         user = self.user_service.create(data)
         return user, 201
     
