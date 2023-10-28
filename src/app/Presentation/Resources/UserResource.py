@@ -19,12 +19,16 @@ def user_resource(api):
         'email': fields.String(required=False, description='User email'),
         'password': fields.String(required=False, description='User password')
     })
+    Task = api.model('Task', {
+        'name': fields.String(required=True, description='Task name'),
+    })
 
     ReadUser = api.model('ReadUser', {
         'id': fields.Integer(required=True, description='User id'),
         'name': fields.String(required=True, description='User name'),
         'username': fields.String(required=True, description='User username'),
-        'email': fields.String(required=True, description='User email')
+        'email': fields.String(required=True, description='User email'),
+        'tasks': fields.List(fields.Nested(Task), description='User tasks', allow_null=True)
     })
 
     return CreateUserDto, UpdateUserDto, ReadUser
