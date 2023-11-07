@@ -56,9 +56,10 @@ class Task(Resource):
     @api.doc('Get_task')
     @api.marshal_with(ReadTask)
     @token_required
+    @g_tokens
     def get(self, id):
         """Fetch a task given its identifier"""
-        task = self.task_service.get_by_id(id)
+        task = self.task_service.get_by_id(id, g.user_id)
         if not task:
             api.abort(404)
         else:
@@ -86,7 +87,7 @@ class Task(Resource):
     @g_tokens
     def delete(self, id):
         """Delete a task given its identifier"""
-        task = self.task_service.get_by_id(id)
+        task = self.task_service.get_by_id(id, g.user_id)
         if not task:
             api.abort(404)
         else:
