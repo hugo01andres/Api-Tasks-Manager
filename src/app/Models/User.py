@@ -6,6 +6,6 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(50), nullable=False)
-    #tasks = db.relationship('Task', backref='user', lazy=True)
+    tasks = db.relationship('Task', backref='user', lazy=True)
     
     
