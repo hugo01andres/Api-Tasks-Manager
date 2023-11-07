@@ -17,12 +17,12 @@ def token_required(func):
         # Aquí verificarías el token de autenticación
         SECRET_KEY = os.environ.get('SECRET_KEY')
         token_with_Bearer = request.headers.get('Authorization')
+        if token_with_Bearer == None:
+            return {'message': 'Token is missing'}, 401
         print(token_with_Bearer)
         split_token = token_with_Bearer.split(' ')
         token = split_token[1]
         print(token)
-        if token == None:
-            return {'message': 'Token is missing'}, 401
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         except:

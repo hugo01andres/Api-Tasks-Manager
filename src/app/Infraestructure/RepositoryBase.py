@@ -24,18 +24,18 @@ class RepositoryBase:
             self.session.commit()
         except Exception as e:
             print(f"Error: {e}")
-            raise ValidationError("Error al agregar el registro")
+            raise ValidationError("Error al add new record")
         
     def update(self, entity):
         try:
             self.session.merge(entity)
             self.session.commit()
         except Exception as e:
-            raise ValidationError("Error al actualizar el registro")
+            raise ValidationError("Error to update record")
         
     def delete(self, entity):
         try:
             self.session.delete(entity)
             self.session.commit()
         except Exception as e:
-            raise ValidationError("Error al eliminar el registro")
+            raise ValidationError("Error to delete record")

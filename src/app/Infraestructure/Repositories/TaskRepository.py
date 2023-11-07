@@ -12,4 +12,10 @@ class TaskRepository(RepositoryBase):
         try:
             return self.model.query.filter_by(name=name).first()
         except Exception as e:
-            raise ValidationError("Error al obtener el registro")
+            raise ValidationError("Error to get the record")
+        
+    def get_all_by_user_id(self, user_id):
+        try:
+            return self.model.query.filter_by(user_id=user_id).all()
+        except Exception as e:
+            raise ValidationError("Error to get the record")
