@@ -3,6 +3,7 @@ aniso8601==9.0.1
 attrs==23.1.0
 blinker==1.6.3
 click==8.1.7
+colorama==0.4.6
 flasgger==0.9.7.1
 Flask==2.3.3
 Flask-Cors==4.0.0
