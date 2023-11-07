@@ -23,8 +23,10 @@ migrate = Migrate(app, db)
 # APP Routes
 from app.Presentation.UserController import api as user_ns
 from app.Presentation.TaskController import api as task_ns
+from app.Security.Auth import api as auth_ns
 api.add_namespace(user_ns, path='/users')
 api.add_namespace(task_ns, path='/tasks')
+api.add_namespace(auth_ns, path='/auth')
 
 
 # Dependency Injection

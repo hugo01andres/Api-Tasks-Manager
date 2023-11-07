@@ -6,10 +6,10 @@ from flask import request, jsonify
 
 load_dotenv()
 
-def generate_token(username):
+def generate_token(data):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     print(SECRET_KEY)
-    token = jwt.encode({'username': username}, 'secret', algorithm='HS256')
+    token = jwt.encode({'user_id': data['user_id']}, SECRET_KEY, algorithm='HS256')
     return token
 
 def verify_token(func):
