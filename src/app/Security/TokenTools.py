@@ -42,6 +42,7 @@ def g_tokens(f):
         else:
             g.user_id = None
         return f(*args, **kwargs)
+    return decorated
 
 
 

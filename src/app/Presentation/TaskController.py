@@ -2,6 +2,8 @@ from app.Services.TaskService import TaskService
 from flask_restx import Resource, Namespace
 from injector import inject
 from app.Presentation.Resources.TaskResource import task_resource
+from app.Security.TokenTools import token_required, g_tokens
+from flask import g
 
 
 api = Namespace('tasks', description='Task related operations')
@@ -21,6 +23,7 @@ class TaskList(Resource):
     api.doc('Lists_tasks')
     #@api.expect(parser_task_lists)
     @api.marshal_list_with(ReadTask)
+    @token_required
     def get(self):
         """List all tasks"""
         tasks = self.task_service.get_all()
@@ -28,11 +31,14 @@ class TaskList(Resource):
     
     @api.doc('Create_task')
     @api.expect(CreateTaskDto)
+    @token_required
+    @g_tokens
     @api.marshal_with(ReadTask)
     def post(self):
         """Create a new task"""
         data = api.payload.copy()
-        data['user_id'] = 1 #TODO: get user_id from token
+        data['user_id'] = g.user_id
+        print(data)
         task = self.task_service.create(**data)
         return task, 201
     
@@ -47,6 +53,7 @@ class Task(Resource):
         super().__init__(**kwargs)
     
     @api.doc('Get_task')
+    @token_required
     @api.marshal_with(ReadTask)
     def get(self, id):
         """Fetch a task given its identifier"""
@@ -59,6 +66,7 @@ class Task(Resource):
     @api.doc('Update_task')
     @api.expect(UpdateTaskDto)
     @api.marshal_with(ReadTask)
+    @token_required
     def put(self, id):
         """Update a task given its identifier"""
         data = api.payload.copy()
@@ -70,6 +78,7 @@ class Task(Resource):
     
     @api.doc('Delete_task')
     @api.marshal_with(ReadTask)
+    @token_required
     def delete(self, id):
         """Delete a task given its identifier"""
         task = self.task_service.get_by_id(id)

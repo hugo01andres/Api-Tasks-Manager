@@ -14,10 +14,14 @@ def task_resource(api):
     UpdateTaskDto = api.model('UpdateTaskDto', {
         'name': fields.String(required=False, description='Task name'),
     })
+    User = api.model('User', {
+        'username': fields.String(required=True, description='User name'),
+    })
 
     ReadTask = api.model('ReadTask', {
         'id': fields.Integer(required=True, description='Task id'),
         'name': fields.String(required=True, description='Task name'),
+        'user': fields.Nested(User, required=True, description='User'),
     })
 
     return CreateTaskDto, UpdateTaskDto, ReadTask

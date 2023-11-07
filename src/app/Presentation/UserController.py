@@ -28,6 +28,7 @@ class UserList(Resource):
         return users, 200
     
     @api.doc('Create_user')
+    @token_required
     @api.expect(CreateUserDto)
     @api.marshal_with(ReadUser)
     def post(self):
@@ -48,6 +49,7 @@ class User(Resource):
         super().__init__(**kwargs)
     
     @api.doc('Get_user')
+    @token_required
     @api.marshal_with(ReadUser)
     def get(self, id):
         """Fetch a user given its identifier"""
@@ -58,6 +60,7 @@ class User(Resource):
             return user, 200
     
     @api.doc('Update_user')
+    @token_required
     @api.expect(UpdateUserDto)
     @api.marshal_with(ReadUser)
     def put(self, id):
@@ -70,12 +73,28 @@ class User(Resource):
             return user, 200
     
     @api.doc('Delete_user')
+    @token_required
     @api.response(204, 'User deleted')
     def delete(self, id):
-        """Delete a user given its identifier"""
+        """Delete a user"""
         user = self.user_service.delete(id)
         if not user:
             api.abort(404)
         else:
             return '', 204
     
+
+@api.route('/register')
+class Register(Resource):
+    @inject
+    def __init__(self, **kwargs):
+        self.user_service = UserService()
+        super().__init__(**kwargs)
+    
+    @api.doc('Register_user')
+    @api.expect(CreateUserDto)
+    def post(self):
+        """Register a new user"""
+        data = api.payload.copy()
+        user = self.user_service.create(**data)
+        return {"Registration": "Succesfully"}, 201
