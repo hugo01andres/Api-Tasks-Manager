@@ -2,6 +2,7 @@ from app.Services.UserService import UserService
 from flask_restx import Resource, Namespace
 from injector import inject
 from app.Presentation.Resources.UserResource import user_resource
+from app.Security.TokenTools import token_required
 
 
 api = Namespace('users', description='User related operations')
@@ -18,6 +19,7 @@ class UserList(Resource):
         super().__init__(**kwargs)
 
     api.doc('Lists_users')
+    @token_required
     #@api.expect(parser_user_lists)
     @api.marshal_list_with(ReadUser)
     def get(self):

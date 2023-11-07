@@ -25,7 +25,8 @@ class Auth(Resource):
         password = api.payload['password']
         user = db.session.query(User).filter(User.username == username).first()
         if user is None:
-            raise ValidationError("Invalid Username")
+            return {'token': 'Invalid username'}, 401
+            
         if user.password == password:
             payload = {
                 'user_id': user.id
@@ -33,4 +34,5 @@ class Auth(Resource):
             token = generate_token(payload)
             return {"token": token} , 200
         else:
-            raise ValidationError("Invalid Password")
+             return {'token': 'Invalid password'}, 401
+            

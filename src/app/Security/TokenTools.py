@@ -2,7 +2,7 @@ import jwt
 from dotenv import load_dotenv
 import os
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, g
 
 load_dotenv()
 
@@ -12,21 +12,38 @@ def generate_token(data):
     token = jwt.encode({'user_id': data['user_id']}, SECRET_KEY, algorithm='HS256')
     return token
 
-def verify_token(func):
-    @wraps(func)
+def token_required(func):
     def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return jsonify({'message': 'Token is missing'}), 401
+        # Aquí verificarías el token de autenticación
+        SECRET_KEY = os.environ.get('SECRET_KEY')
+        token_with_Bearer = request.headers.get('Authorization')
+        print(token_with_Bearer)
+        split_token = token_with_Bearer.split(' ')
+        token = split_token[1]
+        print(token)
+        if token == None:
+            return {'message': 'Token is missing'}, 401
         try:
-            data = jwt.decode(token, 'secret', algorithm='HS256')
-            username = data['username']
-        except jwt.ExpiredSignatureError:
-            return jsonify({'message': 'Token is expired'}), 403
-        except jwt.InvalidTokenError:
-            return jsonify({'message': 'Token is invalid'}), 401
+            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        except:
+            return {'message': 'Token is invalid'}, 401
+        
         return func(*args, **kwargs)
     return wrapper
+
+
+def g_tokens(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers['Authorization'].replace('Bearer ', '',1)
+        if token:
+            decoded_token = jwt.decode(token, os.environ.get('SECRET_KEY'), algorithms=["HS256"])
+            g.user_id = decoded_token['user_id']
+        else:
+            g.user_id = None
+        return f(*args, **kwargs)
+
+
 
 
 
