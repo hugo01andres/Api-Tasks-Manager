@@ -31,9 +31,9 @@ class TaskList(Resource):
     
     @api.doc('Create_task')
     @api.expect(CreateTaskDto)
+    @api.marshal_with(ReadTask)
     @token_required
     @g_tokens
-    @api.marshal_with(ReadTask)
     def post(self):
         """Create a new task"""
         data = api.payload.copy()
@@ -53,8 +53,8 @@ class Task(Resource):
         super().__init__(**kwargs)
     
     @api.doc('Get_task')
-    @token_required
     @api.marshal_with(ReadTask)
+    @token_required
     def get(self, id):
         """Fetch a task given its identifier"""
         task = self.task_service.get_by_id(id)

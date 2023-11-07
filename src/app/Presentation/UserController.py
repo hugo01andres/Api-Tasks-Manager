@@ -19,18 +19,18 @@ class UserList(Resource):
         super().__init__(**kwargs)
 
     api.doc('Lists_users')
-    @token_required
     #@api.expect(parser_user_lists)
     @api.marshal_list_with(ReadUser)
+    @token_required
     def get(self):
         """List all users"""
         users = self.user_service.get_all()
         return users, 200
     
     @api.doc('Create_user')
-    @token_required
     @api.expect(CreateUserDto)
     @api.marshal_with(ReadUser)
+    @token_required
     def post(self):
         """Create a new user"""
         data = api.payload.copy() #Is what the post brings
@@ -49,8 +49,8 @@ class User(Resource):
         super().__init__(**kwargs)
     
     @api.doc('Get_user')
-    @token_required
     @api.marshal_with(ReadUser)
+    @token_required
     def get(self, id):
         """Fetch a user given its identifier"""
         user = self.user_service.get_by_id(id)
@@ -60,9 +60,9 @@ class User(Resource):
             return user, 200
     
     @api.doc('Update_user')
-    @token_required
     @api.expect(UpdateUserDto)
     @api.marshal_with(ReadUser)
+    @token_required
     def put(self, id):
         """Update a user given its identifier"""
         data = api.payload
