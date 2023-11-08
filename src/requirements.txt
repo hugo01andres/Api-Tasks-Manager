@@ -5,7 +5,7 @@ blinker==1.6.3
 click==8.1.7
 colorama==0.4.6
 flasgger==0.9.7.1
-Flask==2.3.3
+Flask==2.2.5
 Flask-Cors==4.0.0
 Flask-Injector==0.15.0
 Flask-Migrate==4.0.5
