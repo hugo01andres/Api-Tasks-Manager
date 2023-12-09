@@ -8,4 +8,5 @@ def index():
     return redirect('/apidocs')
 
 # Inicia la aplicacion
-app = app
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
